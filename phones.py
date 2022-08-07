@@ -1,7 +1,6 @@
 import json
 import pathlib
 from typing import Iterable, Dict
-from pprint import pprint
 
 
 contacts = []
