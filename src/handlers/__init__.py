@@ -1,8 +1,8 @@
-from .new_command import handle_new_command
 from .exit_command import handle_exit_command
 from .get_command import handle_get_command
-from .set_command import handle_set_command
 from .init_contacts import handle_init_contacts
+from .new_command import handle_new_command
+from .set_command import handle_set_command
 
 
 help_message = (
