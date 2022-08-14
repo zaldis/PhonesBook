@@ -1,6 +1,8 @@
 from utils import contact as contact_utils
+from utils.log import logging
 
 
+@logging
 def handle_get_command() -> None:
     filter_key = input('get> Enter your filter key: ')
     filter_value = input('get> Enter your filter value: ')

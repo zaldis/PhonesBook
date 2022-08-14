@@ -1,4 +1,6 @@
 import handlers
+import settings
+from utils.log import logging
 
 
 command_map = {
@@ -8,6 +10,7 @@ command_map = {
 }
 
 
+@logging
 def run():
     handlers.handle_init_contacts()
 
@@ -23,5 +26,6 @@ def run():
 
 
 if __name__ == '__main__':
+    settings.init_settings()
     run()
 
