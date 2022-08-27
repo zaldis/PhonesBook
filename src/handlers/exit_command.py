@@ -1,8 +1,10 @@
 import json
 
 import settings
+from utils.log import logging
 
 
+@logging
 def handle_exit_command() -> None:
     print(f'Saving the data into {settings.STORAGE_FILE_PATH} file ...')
     file = open(settings.STORAGE_FILE_PATH, 'w')
