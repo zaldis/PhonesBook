@@ -24,3 +24,4 @@ def logging(func):
         return result
 
     return wrapper
+

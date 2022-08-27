@@ -3,15 +3,13 @@ import settings
 from utils.log import logging
 
 
-command_map = {
-    'exit': handlers.handle_exit_command,
-    'get': handlers.handle_get_command,
-    'set': handlers.handle_set_command,
-}
-
-
 @logging
 def run():
+    command_map = {
+        'exit': handlers.handle_exit_command,
+        'get': handlers.handle_get_command,
+        'set': handlers.handle_set_command,
+    }
     handlers.handle_init_contacts()
 
     while True:
