@@ -1,0 +1,20 @@
+name: PhonesBook Workflow
+on: [push]
+jobs:
+  Testing:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+    - name: "Run unit tests"
+      run: |
+        export ROOT_DIR=`pwd`
+        export PYTHONPATH="${ROOT_DIR}/src"
+        echo "My echo: $ROOT_DIR; $PYTHONPATH"
+        python -m venv .venv
+        source .venv/bin/activate
+        python -m pip install -r requirements.txt
+        python -m unittest discover -s tests -v
+

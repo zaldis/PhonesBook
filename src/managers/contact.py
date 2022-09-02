@@ -48,7 +48,7 @@ class ContactManager:
         founded_contacts = []
         for contact in cls._contacts:
             contact_value = getattr(contact, field, '')
-            if value.lower() in contact_value:
+            if value.lower() in contact_value.lower():
                 founded_contacts.append(contact)
         return founded_contacts
 
