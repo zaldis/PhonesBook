@@ -1,15 +1,19 @@
 import json
+from dataclasses import asdict
 
-import settings
+from .base import BaseCommandHandler
+from managers import ContactManager, Printer
 from utils.log import logging
 
 
-@logging
-def handle_exit_command() -> None:
-    print(f'Saving the data into {settings.STORAGE_FILE_PATH} file ...')
-    with open(settings.STORAGE_FILE_PATH, 'w') as file_obj:
-        save_text = json.dumps(settings.contacts, indent=2)
-        file_obj.write(save_text)
-    print(f'The data was saved into {settings.STORAGE_FILE_PATH} file')
-    print('Bye Bye sweet user')
+class ExitCommandHandler(BaseCommandHandler):
+    @logging('Exit command')
+    def handle(self) -> None:
+        Printer.print_info(f'Saving the data into {Printer._storage_path} file ...')
+        contacts = ContactManager.get_contacts()
+        raw_contacts = [asdict(contact) for contact in contacts]
+        save_text = json.dumps(raw_contacts, indent=2)
+        Printer.print_storage(save_text)
+        Printer.print_info(f'The data was saved into {Printer._storage_path} file')
+        Printer.print_info('Bye Bye sweet user')
 

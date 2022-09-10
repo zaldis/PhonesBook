@@ -2,33 +2,40 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from main import run
-import settings
+from managers import Printer
+from main import PhonesBookRunner
 
 
 class TestRunPoint(unittest.TestCase):
 
-    def setUp(self) -> None:
-        settings.LOG_FILE_PATH = 'tests/test-logs.log' 
-
     def tearDown(self) -> None:
-        logs_file = Path(settings.LOG_FILE_PATH)
-        logs_file.unlink()
+        if Printer._log_path:
+            logs_file = Path(Printer._log_path)
+            logs_file.unlink()
 
-    @patch('handlers.handle_new_command')
-    @patch('handlers.handle_init_contacts')
-    @patch('handlers.handle_exit_command')
+    @patch('managers.ContactManager.load_contacts')
+    @patch('managers.Reader.read_from_user')
+    @patch('handlers.ExitCommandHandler.handle')
+    @patch('argparse.ArgumentParser')
     def test_simple_exit(
         self,
-        mocked_exit_command_handler,
-        mocked_init_contacts_handler,
-        mocked_new_command_handler
+        mocked_argument_parser,
+        mocked_load_contacts,
+        mocked_read_from_user,
+        mocked_exit_handler
     ):
-        mocked_new_command_handler.return_value = 'exit'
+        self.runner = PhonesBookRunner()
+        Printer.init_printer(
+            storage_path='tests/storage_path.json',
+            log_path='tests/log_path.log'
+        )
+        mocked_read_from_user.return_value = 'exit'
 
-        run()
+        self.runner.run()
 
-        logs_file = Path(settings.LOG_FILE_PATH)
+        self.assertIsNotNone(Printer._log_path)
+        logs_file = Path(Printer._log_path)
         self.assertTrue(logs_file.is_file())
-        self.assertTrue(mocked_exit_command_handler.called)
+        self.assertTrue(mocked_exit_handler.called)
+        self.assertTrue(mocked_load_contacts.called)
 
