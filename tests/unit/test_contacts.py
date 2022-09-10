@@ -1,37 +1,39 @@
 import unittest
 
-import settings
-from utils.contact import get_contacts, set_contact
+from managers import ContactManager, Contact
 
 
 class TestContactsFiltration(unittest.TestCase):
 
     def setUp(self) -> None:
-        settings.contacts = [
-            {
-                "full_name": "Anton Bera",
-                "phone_number": "28474927293",
-                "address": "anton street",
-            }, {
-                "full_name": "Ivan Bobrov",
-                "phone_number": "87493012702",
-                "address": "ivan bobrov",
-            }, {
-                "full_name": "Bill Smith",
-                "phone_number": "739327104729",
-                "address": "bill smith",
-            }, {
-                "full_name": "Anton Junior",
-                "phone_number": "74937297392743",
-                "address": "anton junior",
-            }
+        ContactManager._contacts = [
+            Contact(
+                full_name="Anton Bera",
+                phone_number="28474927293",
+                address="anton street"
+            ),
+            Contact(
+                full_name="Ivan Bobrov",
+                phone_number="87493012702",
+                address="ivan bobrov",
+            ),
+            Contact(
+                full_name="Bill Smith",
+                phone_number="739327104729",
+                address="bill smith"
+            ),
+            Contact(
+                full_name="Anton Junior",
+                phone_number="74937297392743",
+                address="anton junior",
+            )
         ]
         return super().setUp()
 
     def test_no_contacts(self):
-        settings.contacts = []
+        ContactManager._contacts = []
 
-        found_contacts = get_contacts("full_name", "Anton")
+        found_contacts = ContactManager.get_contacts("full_name", "Anton")
  
         self.assertEqual(
             len(list(found_contacts)), 0,
@@ -40,9 +42,9 @@ class TestContactsFiltration(unittest.TestCase):
 
     def test_incorrect_filtration_key(self):
         invalid_filtration_key = "fulll_name"
-        contacts_count = len(settings.contacts)
+        contacts_count = len(ContactManager._contacts)
 
-        found_contacts = get_contacts(invalid_filtration_key, "Anton")
+        found_contacts = ContactManager.get_contacts(invalid_filtration_key, "Anton")
 
         self.assertEqual(
             len(list(found_contacts)), contacts_count,
@@ -53,7 +55,7 @@ class TestContactsFiltration(unittest.TestCase):
         filtration_key = 'full_name'
         filtration_value = 'iVaN'
     
-        found_contacts = get_contacts(filtration_key, filtration_value)
+        found_contacts = ContactManager.get_contacts(filtration_key, filtration_value)
 
         self.assertEqual(
             len(list(found_contacts)), 1,
@@ -64,7 +66,7 @@ class TestContactsFiltration(unittest.TestCase):
         filtration_key = 'full_name'
         filtration_value = 'anTON'
 
-        found_contacts = get_contacts(filtration_key, filtration_value)
+        found_contacts = ContactManager.get_contacts(filtration_key, filtration_value)
 
         self.assertEqual(
             len(list(found_contacts)), 2,
@@ -90,21 +92,26 @@ class TestContactsFiltration(unittest.TestCase):
 class TestAddingNewContacts(unittest.TestCase):
 
     def setUp(self) -> None:
-        settings.contacts = [
-            {
-                "full_name": "Anton Bera",
-                "phone_number": "28474927293",
-                "address": "anton street",
-            },
+        ContactManager._contacts = [
+            Contact(
+                full_name="Anton Bera",
+                phone_number="28474927293",
+                address="anton street"
+            )
         ]
         return super().setUp()
 
     def test_adding_1_contact(self):
-        start_contacts_count = len(settings.contacts)
+        start_contacts_count = len(ContactManager._contacts)
 
-        set_contact('333222888', 'Ivan Bobrov', 'ivan bobrov')
+        new_contact = Contact(
+            phone_number="333222888",
+            full_name="Ivan Bobrov",
+            address="ivan bobrov"
+        )
+        ContactManager.add_contact(new_contact)
 
-        end_contacts_count = len(settings.contacts)
+        end_contacts_count = len(ContactManager._contacts)
         self.assertEqual(
             start_contacts_count + 1, end_contacts_count,
             'After adding new contact the contacts count should be increased by 1'

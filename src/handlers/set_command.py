@@ -1,10 +1,17 @@
-from utils import contact as contact_utils
+from handlers.base import BaseCommandHandler
+from managers import Contact, ContactManager, Printer, Reader
 
 
-def handle_set_command() -> None:
-    phone_number = input('set> Enter phone number: ')
-    full_name = input('set> Enter full name: ')
-    address = input('set> Enter address: ')
-    contact_utils.set_contact(phone_number, full_name, address)
-    print('New contact was successfuly added')
+class SetCommandHandler(BaseCommandHandler):
+    def handle(self) -> None:
+        phone_number = Reader.read_from_user('set> Enter phone number: ')
+        full_name = Reader.read_from_user('set> Enter full name: ')
+        address = Reader.read_from_user('set> Enter address: ')
+        contact = Contact(
+            phone_number=phone_number,
+            full_name=full_name,
+            address=address
+        )
+        ContactManager.add_contact(contact)
+        Printer.print_info('New contact was successfuly added')
 

@@ -1,12 +1,13 @@
 import unittest
 from pathlib import Path
 
-import settings
+from managers import Printer
 from utils.log import logging
 
 
+LOG_MESSAGE = 'my message'
 counter = 0
-@logging
+@logging(LOG_MESSAGE)
 def target_function():
     global counter
     counter += 1
@@ -15,10 +16,10 @@ def target_function():
 class TestActionsLogging(unittest.TestCase):
 
     def setUp(self) -> None:
-        settings.LOG_FILE_PATH = 'tests/testing-log-file.log'
+        Printer._log_path = 'tests/testing-log-file.log'
 
     def tearDown(self) -> None:
-        testing_log_file = Path(settings.LOG_FILE_PATH)
+        testing_log_file = Path(Printer._log_path)
         testing_log_file.unlink()
 
     def test_logging_calls_origin_function(self):
