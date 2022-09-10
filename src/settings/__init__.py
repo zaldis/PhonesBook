@@ -1,5 +1,5 @@
+import argparse
 import pathlib
-import sys
 
 
 contacts = []
@@ -14,8 +14,12 @@ def init_settings():
     global STORAGE_FILE_PATH
     global LOG_FILE_PATH
 
-    if len(sys.argv) > 1:
-        STORAGE_FILE_NAME = sys.argv[1]
+    parser = argparse.ArgumentParser(description='PhonesBook system to save your contacts')
+    parser.add_argument('-s', '--storage', type=str, help='File name to load/store your contacts')
+    argumets = parser.parse_args()
+
+    if argumets.storage:
+        STORAGE_FILE_NAME = argumets.storage
 
     STORAGE_FILE_PATH = f'{PROJECT_ROOT_FOLDER}/{STORAGE_FILE_NAME}.json'
     LOG_FILE_PATH = f'{PROJECT_ROOT_FOLDER}/{STORAGE_FILE_NAME}.log'
