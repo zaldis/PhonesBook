@@ -16,9 +16,6 @@ def logging(func):
         result = func(*args, **kwargs)
 
         stringified_now = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        # log_file = open(settings.LOG_FILE_PATH, 'a')
-        # log_file.write(f'[{stringified_now}] Function <{func.__name__}> is ended\n')
-        # log_file.close()
         with open(settings.LOG_FILE_PATH, 'a') as log_file:
             log_file.write(f'[{stringified_now}] Function <{func.__name__}> is ended\n')
         return result
